@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**{
+    box-shadow: 0 0 0 3px red inset;
+}*/
+body {
+    background-color: #cbd5e1;
+}
+.img-product{
+    mix-blend-mode: multiply;
+}
