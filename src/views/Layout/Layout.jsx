@@ -1,15 +1,36 @@
 import {Link, Outlet, useLocation, useNavigate, useParams} from "react-router-dom";
 import {Categories} from "../../components/Categories.jsx";
 import {useSelector} from "react-redux";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 
 export const Layout = ()=>{
     const params = useParams()
     const numberPannier = useSelector((state)=>state.rootReducer.pannier.value)
     const navigate = useNavigate()
     const location = useLocation()
-
-    console.log(location)
+    const [token, setToken]= useState()
+    const handleConnection = async ()=>{
+        if (!token){
+            const response =await fetch('https://fakestoreapi.com/auth/login', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    username: "mor_2314",
+                    password: "83r5^_",
+                })
+            })
+            const req = await response.json()
+            setToken(req.token)
+        }else {
+            setToken(null)
+            sessionStorage.removeItem('access_token')
+        }
+    }
+    useEffect(()=>{
+        token && sessionStorage.setItem('access_token', token)
+    }, [token])
 
     useEffect(()=>{
         if ( document.querySelector('#cat-btn')){
@@ -23,10 +44,13 @@ export const Layout = ()=>{
 
     return(
         <>
-            <nav className="flex justify-between p-10 bg-slate-700 text-slate-50">
+            <nav className="flex justify-between p-10 bg-slate-700 text-slate-50 items-center">
                 <span className="uppercase font-bold">Fake store</span>
-                <ul className="flex ">
+                <ul className="flex items-center">
                     <li className="px-5"><Link to="/">Home</Link></li>
+                    <li className="px-5"><button className="border-2 px-3 py-1.5 rounded hover:bg-slate-600/50" onClick={()=>handleConnection()}>
+                        {token ? 'Logout': 'Login'}
+                    </button></li>
                     <li className="flex cursor-pointer" onClick={()=>
                         navigate('/panier')
                     }>

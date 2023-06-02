@@ -47,7 +47,7 @@ export const All = ()=>{
                             setSnackTitle(product.title)
                             setOpenScnak(true)
                             setTimeout(()=>{
-                                document.querySelector('.snackbar').classList.add('hidden')
+                                document.querySelector('.snackbar') && document.querySelector('.snackbar').classList.add('hidden')
                                 setOpenScnak(false)
                             }, 3000)
                         }}/>
